@@ -587,10 +587,12 @@ void QNetworkReplyHandler::sendResponseIfNeeded()
 
     if (url.isLocalFile()) {
         if (client->usesAsyncCallbacks()) {
+            // setLoadingDeferred
+            m_queue.lock();
             client->didReceiveResponseAsync(m_resourceHandle, response);
         } else {
             client->didReceiveResponse(m_resourceHandle, response);
-            continueDidReceiveResponse();
+//            continueDidReceiveResponse();
         }
         return;
     }
@@ -614,11 +616,10 @@ void QNetworkReplyHandler::sendResponseIfNeeded()
     }
 
     if (client->usesAsyncCallbacks()) {
+        m_queue.lock();
         client->didReceiveResponseAsync(m_resourceHandle, response);
-    } else {
+    } else
         client->didReceiveResponse(m_resourceHandle, response);
-        continueDidReceiveResponse();
-    }
 }
 
 void QNetworkReplyHandler::continueWillSendRequest(const ResourceRequest& newRequest)
@@ -631,6 +632,8 @@ void QNetworkReplyHandler::continueWillSendRequest(const ResourceRequest& newReq
 
 void QNetworkReplyHandler::continueDidReceiveResponse()
 {
+    ASSERT(!client() || client()->usesAsyncCallbacks());
+    m_queue.unlock();
 }
 
 void QNetworkReplyHandler::redirect(ResourceResponse& response, const QUrl& redirection)
