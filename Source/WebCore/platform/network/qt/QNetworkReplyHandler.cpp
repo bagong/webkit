@@ -632,7 +632,7 @@ void QNetworkReplyHandler::continueWillSendRequest(const ResourceRequest& newReq
 
 void QNetworkReplyHandler::continueDidReceiveResponse()
 {
-    ASSERT(!client() || client()->usesAsyncCallbacks());
+    ASSERT(!m_resourceHandle->client() || m_resourceHandle->client()->usesAsyncCallbacks());
     m_queue.unlock();
 }
 
