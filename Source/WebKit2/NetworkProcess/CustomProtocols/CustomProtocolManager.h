@@ -39,7 +39,7 @@
 #include <wtf/text/StringHash.h>
 OBJC_CLASS NSURLSessionConfiguration;
 OBJC_CLASS WKCustomProtocol;
-#elif !PLATFORM(QT)
+#else
 #include "CustomProtocolManagerImpl.h"
 #endif
 
@@ -110,7 +110,7 @@ private:
     // WKCustomProtocol objects can be removed from the m_customProtocolMap from multiple threads.
     // We return a RetainPtr here because it is unsafe to return a raw pointer since the object might immediately be destroyed from a different thread.
     RetainPtr<WKCustomProtocol> protocolForID(uint64_t customProtocolID);
-#elif !PLATFORM(QT)
+#else
     // FIXME: Move mac specific code to CustomProtocolManagerImpl.
     std::unique_ptr<CustomProtocolManagerImpl> m_impl;
 #endif

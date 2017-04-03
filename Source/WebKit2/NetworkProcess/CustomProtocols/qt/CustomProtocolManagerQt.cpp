@@ -28,6 +28,7 @@ const char* CustomProtocolManager::supplementName()
 }
 
 CustomProtocolManager::CustomProtocolManager(ChildProcess*)
+    : m_impl(nullptr)
 {
 }
 
