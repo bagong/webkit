@@ -55,12 +55,6 @@
 #include "WebSQLiteDatabaseTracker.h"
 #endif
 
-#if PLATFORM(QT)
-QT_BEGIN_NAMESPACE
-class QNetworkAccessManager;
-QT_END_NAMESPACE
-#endif
-
 namespace API {
 class Object;
 }
@@ -331,11 +325,6 @@ private:
 #endif
 
     bool m_fullKeyboardAccessEnabled;
-
-    // QTFIXME: leftover of old process model
-//#if PLATFORM(QT)
-//    QNetworkAccessManager* m_networkAccessManager { nullptr };
-//#endif
 
     HashMap<uint64_t, WebFrame*> m_frameMap;
 

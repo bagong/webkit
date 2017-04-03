@@ -28,9 +28,10 @@
 
 #include "NetworkProcessCreationParameters.h"
 #include "QtNetworkAccessManager.h"
-#include "CookieJarQt.h"
 
 #include <WebCore/CertificateInfo.h>
+#include <WebCore/CookieJarQt.h>
+#include <QNetworkDiskCache>
 
 using namespace WebCore;
 
@@ -45,12 +46,12 @@ void NetworkProcess::platformInitializeNetworkProcess(const NetworkProcessCreati
         jar->setParent(0);
     }
 
-//    if (!parameters.diskCacheDirectory.isEmpty()) {
-//        QNetworkDiskCache* diskCache = new QNetworkDiskCache();
-//        diskCache->setCacheDirectory(parameters.diskCacheDirectory);
-//        // The m_networkAccessManager takes ownership of the diskCache object upon the following call.
-//        m_networkAccessManager->setCache(diskCache);
-//    }
+    if (!parameters.diskCacheDirectory.isEmpty()) {
+        QNetworkDiskCache* diskCache = new QNetworkDiskCache();
+        diskCache->setCacheDirectory(parameters.diskCacheDirectory);
+        // The m_networkAccessManager takes ownership of the diskCache object upon the following call.
+        m_networkAccessManager.setCache(diskCache);
+    }
 }
 
 void NetworkProcess::platformTerminate()

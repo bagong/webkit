@@ -81,8 +81,6 @@
 #if PLATFORM(QT)
 #include "ArgumentCodersQt.h"
 #include "TapHighlightController.h"
-#include <QNetworkReply>
-#include <QNetworkRequest>
 #endif
 
 #if HAVE(ACCESSIBILITY) && (PLATFORM(GTK) || PLATFORM(EFL))
