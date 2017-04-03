@@ -337,7 +337,7 @@ void QQuickWebViewPrivate::initialize(WKPageConfigurationRef configurationRef)
 //        pageConfiguration = adoptWK(WKPageConfigurationCreate()); // API::PageConfiguration::create();
 
     WKRetainPtr<WKPageConfigurationRef> pageConfiguration;
-//    qDebug() << pageConfiguration.get();
+    qDebug() << pageConfiguration.get();
 
 //    pageGroup = WKPageConfigurationGetPageGroup(configurationRef);
 //    if (!pageGroup)
@@ -361,7 +361,6 @@ void QQuickWebViewPrivate::initialize(WKPageConfigurationRef configurationRef)
     pageClient.initialize(q_ptr, pageEventHandler.data(), &undoController);
     webPageProxy->initializeWebPage();
 
-    qDebug() << ">>> setUseFixedLayout <<<";
     webPageProxy->setUseFixedLayout(s_flickableViewportEnabled);
 
     {
@@ -1879,8 +1878,6 @@ void QQuickWebView::setUrl(const QUrl& url)
 
     if (url.isEmpty())
         return;
-
-    qDebug() << Q_FUNC_INFO << url;
 
     WKRetainPtr<WKURLRef> u = adoptWK(WKURLCreateWithQUrl(url));
     WKPageLoadURL(d->webPage.get(), u.get());
