@@ -336,29 +336,21 @@ QQuickWebViewPrivate::~QQuickWebViewPrivate()
 // Note: we delay this initialization to make sure that QQuickWebView has its d-ptr in-place.
 void QQuickWebViewPrivate::initialize(WKPageConfigurationRef configurationRef)
 {
-//    pageConfiguration = configurationRef;
-//    qDebug() << pageConfiguration.get();
-//    if (!pageConfiguration) {
-//        pageConfiguration = adoptWK(WKPageConfigurationCreate()); // API::PageConfiguration::create();
-
     WKRetainPtr<WKPageConfigurationRef> pageConfiguration;
-    qDebug() << pageConfiguration.get();
-
-//    pageGroup = WKPageConfigurationGetPageGroup(configurationRef);
-//    if (!pageGroup)
-//        pageGroup = adoptWK(WKPageGroupCreateWithIdentifier(0));
-
     WKContextRef contextRef = nullptr;
+
     if (configurationRef) {
-        pageConfiguration = configurationRef;
+        pageConfiguration = adoptWK(configurationRef);
         contextRef = WKPageConfigurationGetContext(configurationRef);
+        context = QtWebContext::create(contextRef);
     } else {
         pageConfiguration = adoptWK(WKPageConfigurationCreate());
+        WKRetainPtr<WKPageGroupRef> pageGroup = adoptWK(WKPageGroupCreateWithIdentifier(0));
+        WKPageConfigurationSetPageGroup(pageConfiguration.get(), pageGroup.get());
+        context = QtWebContext::defaultContext();
     }
 
-    context = configurationRef ? QtWebContext::create(contextRef) : QtWebContext::defaultContext();
-
-    webPageProxy = toImpl(context->context())->createWebPage(pageClient, toImpl(pageConfiguration.get())->copy());
+    webPageProxy = toImpl(context->context())->createWebPage(pageClient,toImpl(pageConfiguration.get())->copy());
     webPage = toAPI(webPageProxy.get());
     pageToView()->insert(webPage.get(), this);
 
